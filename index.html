@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>🛒 ShopEasy</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#products">Products</a>
+            <a href="#cart">Cart 🛍️</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Welcome to ShopEasy</h2>
+        <p>Best products at the best prices.</p>
+        <button onclick="showProducts()">Shop Now</button>
+    </section>
+
+    <section id="products">
+        <h2>Our Products</h2>
+
+        <div class="products">
+
+            <div class="product">
+                <div class="product-image">👟</div>
+                <h3>Running Shoes</h3>
+                <p>₹1,499</p>
+                <button onclick="addToCart('Running Shoes', 1499)">
+                    Add to Cart
+                </button>
+            </div>
+
+            <div class="product">
+                <div class="product-image">🎧</div>
+                <h3>Wireless Headphones</h3>
+                <p>₹999</p>
+                <button onclick="addToCart('Wireless Headphones', 999)">
+                    Add to Cart
+                </button>
+            </div>
+
+            <div class="product">
+                <div class="product-image">⌚</div>
+                <h3>Smart Watch</h3>
+                <p>₹1,999</p>
+                <button onclick="addToCart('Smart Watch', 1999)">
+                    Add to Cart
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="cart">
+        <h2>Shopping Cart</h2>
+        <div id="cartItems">
+            <p>Your cart is empty.</p>
+        </div>
+        <h3 id="total">Total: ₹0</h3>
+    </section>
+
+    <footer>
+        <p>© 2026 ShopEasy | DevOps E-Commerce Project</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
