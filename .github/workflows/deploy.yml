@@ -1,0 +1,17 @@
+name: Deploy ShopEasy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        run: echo "ShopEasy deployment started successfully!"
