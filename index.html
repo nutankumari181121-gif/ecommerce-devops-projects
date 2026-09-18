@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <title>ShopEasy - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <header>
@@ -31,7 +33,7 @@
             <div class="product">
                 <div class="product-image">👟</div>
                 <h3>Running Shoes</h3>
-                <p>₹1,499</p>
+                <p>&#8377;1,499</p>
                 <button onclick="addToCart('Running Shoes', 1499)">
                     Add to Cart
                 </button>
@@ -40,16 +42,18 @@
             <div class="product">
                 <div class="product-image">🎧</div>
                 <h3>Wireless Headphones</h3>
-                <p>₹999</p>
+                <p>&#8377;999</p>
                 <button onclick="addToCart('Wireless Headphones', 999)">
                     Add to Cart
                 </button>
             </div>
 
             <div class="product">
-                <div class="product-image">⌚</div>
+             <div class="product-image">
+           <img src="https://raw.githubusercontent.com/nutankumari181121-gif/ecommerce-devops-projects/master/smartwatch.png" alt="Smart Watch">
+</div>
                 <h3>Smart Watch</h3>
-                <p>₹1,999</p>
+                <p>&#8377;1,999</p>
                 <button onclick="addToCart('Smart Watch', 1999)">
                     Add to Cart
                 </button>
@@ -60,10 +64,12 @@
 
     <section id="cart">
         <h2>Shopping Cart</h2>
+
         <div id="cartItems">
             <p>Your cart is empty.</p>
         </div>
-        <h3 id="total">Total: ₹0</h3>
+
+        <h3 id="total">Total: &#8377;0</h3>
     </section>
 
     <footer>
@@ -71,5 +77,8 @@
     </footer>
 
     <script src="script.js"></script>
+
 </body>
 </html>
+```
+
