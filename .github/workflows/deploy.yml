@@ -24,7 +24,7 @@ jobs:
           aws-region: eu-north-1
 
       - name: Deploy to EC2
-        run: |
+        run:  |
           aws ssm send-command \
             --instance-ids i-03d9f6644b43993b8 \
             --document-name "AWS-RunShellScript" \
