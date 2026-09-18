@@ -117,3 +117,8 @@ footer {
     text-align: center;
     padding: 20px;
 }
+.product-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
