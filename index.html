@@ -12,11 +12,13 @@
 
     <header>
         <h1>🛒 ShopEasy</h1>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#products">Products</a>
-            <a href="#cart">Cart 🛍️</a>
-        </nav>
+     <nav>
+    <a href="#">Home</a>
+    <a href="#products">Products</a>
+    <a href="#cart">Cart 🛍️</a>
+    <button onclick="openLogin()">Login</button>
+    <button onclick="openRegister()">Register</button>
+</nav>   
     </header>
 
     <section class="hero">
@@ -58,7 +60,112 @@
                     Add to Cart
                 </button>
             </div>
+          <div class="product">
+    <div class="product-image">🔊</div>
+    <h3>Bluetooth Speaker</h3>
+    <p>&#8377;1,299</p>
+    <button onclick="addToCart('Bluetooth Speaker', 1299)">
+        Add to Cart
+    </button>
+</div>
 
+<div class="product">
+    <div class="product-image">🖱️</div>
+    <h3>Gaming Mouse</h3>
+    <p>&#8377;799</p>
+    <button onclick="addToCart('Gaming Mouse', 799)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🎒</div>
+    <h3>Travel Backpack</h3>
+    <p>&#8377;899</p>
+    <button onclick="addToCart('Travel Backpack', 899)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🕶️</div>
+    <h3>Sunglasses</h3>
+    <p>&#8377;599</p>
+    <button onclick="addToCart('Sunglasses', 599)">
+        Add to Cart
+    </button>
+</div>
+    <div class="product">
+    <div class="product-image">📺</div>
+    <h3>Smart TV</h3>
+    <p>&#8377;29,999</p>
+    <button onclick="addToCart('Smart TV', 29999)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">📱</div>
+    <h3>Tablet</h3>
+    <p>&#8377;12,999</p>
+    <button onclick="addToCart('Tablet', 12999)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🔋</div>
+    <h3>Power Bank</h3>
+    <p>&#8377;1,199</p>
+    <button onclick="addToCart('Power Bank', 1199)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🎵</div>
+    <h3>Wireless Earbuds</h3>
+    <p>&#8377;1,599</p>
+    <button onclick="addToCart('Wireless Earbuds', 1599)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🖨️</div>
+    <h3>Printer</h3>
+    <p>&#8377;8,999</p>
+    <button onclick="addToCart('Printer', 8999)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">💡</div>
+    <h3>Desk Lamp</h3>
+    <p>&#8377;699</p>
+    <button onclick="addToCart('Desk Lamp', 699)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🪑</div>
+    <h3>Office Chair</h3>
+    <p>&#8377;5,999</p>
+    <button onclick="addToCart('Office Chair', 5999)">
+        Add to Cart
+    </button>
+</div>
+
+<div class="product">
+    <div class="product-image">🎤</div>
+    <h3>Wireless Microphone</h3>
+    <p>&#8377;2,499</p>
+    <button onclick="addToCart('Wireless Microphone', 2499)">
+        Add to Cart
+    </button>
+</div>
         </div>
     </section>
 
@@ -75,7 +182,39 @@
     <footer>
         <p>© 2026 ShopEasy | DevOps E-Commerce Project</p>
     </footer>
+   <!-- Login / Register Section -->
+<section id="auth" class="auth-section" style="display:none;">
 
+    <div class="auth-box" id="loginBox">
+        <h2>Login</h2>
+
+        <input type="email" id="loginEmail" placeholder="Enter Email">
+        <input type="password" id="loginPassword" placeholder="Enter Password">
+
+        <button onclick="loginUser()">Login</button>
+
+        <p>
+            Don't have an account?
+            <a href="#" onclick="showRegister()">Register</a>
+        </p>
+    </div>
+
+    <div class="auth-box" id="registerBox" style="display:none;">
+        <h2>Create Account</h2>
+
+        <input type="text" id="registerName" placeholder="Enter Name">
+        <input type="email" id="registerEmail" placeholder="Enter Email">
+        <input type="password" id="registerPassword" placeholder="Create Password">
+
+        <button onclick="registerUser()">Register</button>
+
+        <p>
+            Already have an account?
+            <a href="#" onclick="showLogin()">Login</a>
+        </p>
+    </div>
+
+</section>
     <script src="script.js"></script>
 
 </body>
