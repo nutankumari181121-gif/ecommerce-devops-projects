@@ -89,27 +89,34 @@ function registerUser() {
     alert("Registration successful! Please login.");
     showLogin();
 }
-
 function loginUser() {
-    const email = document.getElementById("loginEmail").value;
+    const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
-
-    const savedUser = JSON.parse(localStorage.getItem("shopEasyUser"));
 
     if (!email || !password) {
         alert("Please enter email and password.");
         return;
     }
 
-    if (savedUser &&
+    const savedUser = JSON.parse(localStorage.getItem("shopEasyUser"));
+
+    if (
+        savedUser &&
         savedUser.email === email &&
-        savedUser.password === password) {
+        savedUser.password === password
+    ) {
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("loggedInUser", savedUser.name);
 
         alert("Login successful! Welcome to ShopEasy.");
+
+        closeAuth();
+
     } else {
         alert("Invalid email or password.");
     }
 }
+
 function closeAuth() {
     document.getElementById("auth").style.display = "none";
 }
