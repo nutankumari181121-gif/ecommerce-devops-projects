@@ -215,6 +215,39 @@
                 <a href="#" onclick="showRegister()">Register</a>
             </p>
         </div>
+     <!-- Login / Register Popup -->
+<div id="auth" class="auth-modal" style="display:none;">
+
+    <div class="auth-container">
+
+        <button class="close-auth" onclick="closeAuth()">×</button>
+
+        <!-- Login -->
+        <div id="loginBox" class="auth-box">
+            <h2>🔐 Welcome Back</h2>
+            <p>Login to your ShopEasy account</p>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Enter Email"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter Password"
+            >
+
+            <button class="auth-btn" onclick="loginUser()">
+                Login
+            </button>
+
+            <p>
+                Don't have an account?
+                <a href="#" onclick="showRegister()">Register</a>
+            </p>
+        </div>
 
         <!-- Register -->
         <div id="registerBox" class="auth-box" style="display:none;">
@@ -254,6 +287,7 @@
     </div>
 
 </div>
+        
     <script src="script.js"></script>
 
 </body>
