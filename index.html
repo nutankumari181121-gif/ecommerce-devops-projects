@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -182,39 +182,78 @@
     <footer>
         <p>© 2026 ShopEasy | DevOps E-Commerce Project</p>
     </footer>
-   <!-- Login / Register Section -->
-<section id="auth" class="auth-section" style="display:none;">
+     <!-- Login / Register Popup -->
+<div id="auth" class="auth-modal" style="display:none;">
 
-    <div class="auth-box" id="loginBox">
-        <h2>Login</h2>
+    <div class="auth-container">
 
-        <input type="email" id="loginEmail" placeholder="Enter Email">
-        <input type="password" id="loginPassword" placeholder="Enter Password">
+        <button class="close-auth" onclick="closeAuth()">×</button>
 
-        <button onclick="loginUser()">Login</button>
+        <!-- Login -->
+        <div id="loginBox" class="auth-box">
+            <h2>🔐 Welcome Back</h2>
+            <p>Login to your ShopEasy account</p>
 
-        <p>
-            Don't have an account?
-            <a href="#" onclick="showRegister()">Register</a>
-        </p>
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Enter Email"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter Password"
+            >
+
+            <button class="auth-btn" onclick="loginUser()">
+                Login
+            </button>
+
+            <p>
+                Don't have an account?
+                <a href="#" onclick="showRegister()">Register</a>
+            </p>
+        </div>
+
+        <!-- Register -->
+        <div id="registerBox" class="auth-box" style="display:none;">
+
+            <h2>✨ Create Account</h2>
+            <p>Join ShopEasy today</p>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="Enter Name"
+            >
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Enter Email"
+            >
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Create Password"
+            >
+
+            <button class="auth-btn" onclick="registerUser()">
+                Create Account
+            </button>
+
+            <p>
+                Already have an account?
+                <a href="#" onclick="showLogin()">Login</a>
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="auth-box" id="registerBox" style="display:none;">
-        <h2>Create Account</h2>
-
-        <input type="text" id="registerName" placeholder="Enter Name">
-        <input type="email" id="registerEmail" placeholder="Enter Email">
-        <input type="password" id="registerPassword" placeholder="Create Password">
-
-        <button onclick="registerUser()">Register</button>
-
-        <p>
-            Already have an account?
-            <a href="#" onclick="showLogin()">Login</a>
-        </p>
-    </div>
-
-</section>
+</div>
     <script src="script.js"></script>
 
 </body>

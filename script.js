@@ -41,7 +41,7 @@ function showProducts() {
 /* LOGIN / REGISTER */
 
 function openLogin() {
-    document.getElementById("auth").style.display = "block";
+    document.getElementById("auth").style.display = "flex";
     document.getElementById("loginBox").style.display = "block";
     document.getElementById("registerBox").style.display = "none";
 
@@ -51,7 +51,7 @@ function openLogin() {
 }
 
 function openRegister() {
-    document.getElementById("auth").style.display = "block";
+    document.getElementById("auth").style.display = "flex";
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("registerBox").style.display = "block";
 
@@ -109,4 +109,7 @@ function loginUser() {
     } else {
         alert("Invalid email or password.");
     }
+}
+function closeAuth() {
+    document.getElementById("auth").style.display = "none";
 }
