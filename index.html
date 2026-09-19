@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopEasy - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    </head>
 
-<body>
-
+<body onload="openLogin()">
     <header>
         <h1>🛒 ShopEasy</h1>
      <nav>
@@ -191,6 +190,7 @@
 
         <!-- Login -->
         <div id="loginBox" class="auth-box">
+
             <h2>🔐 Welcome Back</h2>
             <p>Login to your ShopEasy account</p>
 
@@ -214,39 +214,7 @@
                 Don't have an account?
                 <a href="#" onclick="showRegister()">Register</a>
             </p>
-        </div>
-     <!-- Login / Register Popup -->
-<div id="auth" class="auth-modal" style="display:none;">
 
-    <div class="auth-container">
-
-        <button class="close-auth" onclick="closeAuth()">×</button>
-
-        <!-- Login -->
-        <div id="loginBox" class="auth-box">
-            <h2>🔐 Welcome Back</h2>
-            <p>Login to your ShopEasy account</p>
-
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter Email"
-            >
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter Password"
-            >
-
-            <button class="auth-btn" onclick="loginUser()">
-                Login
-            </button>
-
-            <p>
-                Don't have an account?
-                <a href="#" onclick="showRegister()">Register</a>
-            </p>
         </div>
 
         <!-- Register -->
