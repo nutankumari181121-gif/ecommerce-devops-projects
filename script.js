@@ -201,8 +201,15 @@ function closeAuth() {
     }
 }
 // =========================
-// BUY NOW
+// BUY NOW - PRODUCT DETAILS
 // =========================
+
+let selectedBuyProduct = {
+    name: "",
+    price: 0
+};
+
+let buyQuantity = 1;
 
 document.addEventListener("DOMContentLoaded", function () {
     const products = document.querySelectorAll(".product");
@@ -224,49 +231,131 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function buyProduct(product) {
+
+    // Login check
+    if (localStorage.getItem("loggedIn") !== "true") {
+        alert("Please login first to buy a product.");
+        openLogin();
+        return;
+    }
+
     const productImage = product.querySelector(".product-image");
     const productName = product.querySelector("h3");
     const productPrice = product.querySelector("p");
 
+    selectedBuyProduct.name = productName.innerText;
+    selectedBuyProduct.price = Number(
+        productPrice.innerText.replace(/[^\d]/g, "")
+    );
+
+    buyQuantity = 1;
+
     const modalImage = document.getElementById("buyProductImage");
     const modalName = document.getElementById("buyProductName");
     const modalPrice = document.getElementById("buyProductPrice");
-    const buyModal = document.getElementById("buyModal");
+    const quantityElement = document.getElementById("buyQuantity");
 
     modalImage.innerHTML = productImage.innerHTML;
-    modalName.innerText = productName.innerText;
-    modalPrice.innerText = productPrice.innerText;
+    modalName.innerText = selectedBuyProduct.name;
+    modalPrice.innerText = "₹" + selectedBuyProduct.price.toLocaleString("en-IN");
+    quantityElement.innerText = buyQuantity;
 
     const image = modalImage.querySelector("img");
 
     if (image) {
-        image.style.width = "180px";
-        image.style.height = "180px";
+        image.style.width = "260px";
+        image.style.height = "260px";
         image.style.objectFit = "contain";
     }
 
-    buyModal.style.display = "flex";
+    document.getElementById("deliveryAddress").value = "";
+
+    updateBuyTotal();
+
+    document.getElementById("buyModal").style.display = "flex";
 }
 
 function createBuyModal() {
+
     const modal = document.createElement("div");
 
     modal.id = "buyModal";
     modal.className = "buy-modal";
+
     modal.innerHTML = `
-        <div class="buy-container">
+        <div class="buy-details-card">
 
             <button class="buy-close" onclick="closeBuyModal()">×</button>
 
-            <div id="buyProductImage" class="buy-product-image"></div>
+            <div class="buy-details-content">
 
-            <h2 id="buyProductName"></h2>
+                <div class="buy-details-image" id="buyProductImage"></div>
 
-            <p id="buyProductPrice" class="buy-product-price"></p>
+                <div class="buy-details-info">
 
-            <button class="confirm-buy-btn" onclick="confirmBuy()">
-                Continue to Buy
-            </button>
+                    <span class="buy-brand">ShopEasy</span>
+
+                    <h2 id="buyProductName"></h2>
+
+                    <div class="buy-rating">
+                        ★★★★★
+                        <span>4.5</span>
+                    </div>
+
+                    <p id="buyProductPrice" class="buy-product-price"></p>
+
+                    <p class="buy-delivery">
+                        🚚 FREE Delivery
+                    </p>
+
+                    <hr>
+
+                    <label class="quantity-label">
+                        Quantity
+                    </label>
+
+                    <div class="quantity-box">
+
+                        <button onclick="changeBuyQuantity(-1)">
+                            −
+                        </button>
+
+                        <span id="buyQuantity">1</span>
+
+                        <button onclick="changeBuyQuantity(1)">
+                            +
+                        </button>
+
+                    </div>
+
+                    <label class="address-label">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="deliveryAddress"
+                        placeholder="Enter your delivery address"
+                        rows="3"
+                    ></textarea>
+
+                    <div class="buy-total-row">
+
+                        <span>Total</span>
+
+                        <strong id="buyTotal"></strong>
+
+                    </div>
+
+                    <button
+                        class="confirm-buy-btn"
+                        onclick="confirmBuy()"
+                    >
+                        Buy Now
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
     `;
@@ -274,13 +363,60 @@ function createBuyModal() {
     document.body.appendChild(modal);
 }
 
+function changeBuyQuantity(change) {
+
+    buyQuantity += change;
+
+    if (buyQuantity < 1) {
+        buyQuantity = 1;
+    }
+
+    if (buyQuantity > 10) {
+        buyQuantity = 10;
+    }
+
+    document.getElementById("buyQuantity").innerText = buyQuantity;
+
+    updateBuyTotal();
+}
+
+function updateBuyTotal() {
+
+    const total = selectedBuyProduct.price * buyQuantity;
+
+    document.getElementById("buyTotal").innerText =
+        "₹" + total.toLocaleString("en-IN");
+}
+
 function closeBuyModal() {
-    document.getElementById("buyModal").style.display = "none";
+
+    const modal = document.getElementById("buyModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
 }
 
 function confirmBuy() {
-    const name = document.getElementById("buyProductName").innerText;
-    const price = document.getElementById("buyProductPrice").innerText;
 
-    alert("Thank you for choosing " + name + " - " + price);
+    const address = document
+        .getElementById("deliveryAddress")
+        .value
+        .trim();
+
+    if (!address) {
+        alert("Please enter your delivery address.");
+        return;
+    }
+
+    const total = selectedBuyProduct.price * buyQuantity;
+
+    alert(
+        "Order placed successfully! 🎉\n\n" +
+        "Product: " + selectedBuyProduct.name + "\n" +
+        "Quantity: " + buyQuantity + "\n" +
+        "Total: ₹" + total.toLocaleString("en-IN")
+    );
+
+    closeBuyModal();
 }
