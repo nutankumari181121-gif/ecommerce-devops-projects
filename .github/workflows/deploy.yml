@@ -24,9 +24,36 @@ jobs:
           aws-region: eu-north-1
 
       - name: Deploy to EC2
+        shell: bash
         run: |
-          aws ssm send-command \
+          COMMAND_ID=$(aws ssm send-command \
             --instance-ids i-03d9f6644b43993b8 \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=["set -e","mkdir -p /tmp/shopeasy-deploy","curl -fL https://raw.githubusercontent.com/nutankumari181121-gif/ecommerce-devops-projects/master/index.html -o /tmp/shopeasy-deploy/index.html","curl -fL https://raw.githubusercontent.com/nutankumari181121-gif/ecommerce-devops-projects/master/script.js -o /tmp/shopeasy-deploy/script.js","curl -fL https://raw.githubusercontent.com/nutankumari181121-gif/ecommerce-devops-projects/master/style.css -o /tmp/shopeasy-deploy/style.css","curl -fL https://raw.githubusercontent.com/nutankumari181121-gif/ecommerce-devops-projects/master/smartwatch.png -o /tmp/shopeasy-deploy/smartwatch.png","sudo cp /tmp/shopeasy-deploy/index.html /usr/share/nginx/html/index.html","sudo cp /tmp/shopeasy-deploy/script.js /usr/share/nginx/html/script.js","sudo cp /tmp/shopeasy-deploy/style.css /usr/share/nginx/html/style.css","sudo cp /tmp/shopeasy-deploy/smartwatch.png /usr/share/nginx/html/smartwatch.png","sudo systemctl reload nginx"]' \
+            --region eu-north-1 \
+            --query "Command.CommandId" \
+            --output text)
+
+          echo "SSM Command ID: $COMMAND_ID"
+
+          aws ssm wait command-executed \
+            --command-id "$COMMAND_ID" \
+            --instance-id i-03d9f6644b43993b8 \
             --region eu-north-1
+
+          STATUS=$(aws ssm get-command-invocation \
+            --command-id "$COMMAND_ID" \
+            --instance-id i-03d9f6644b43993b8 \
+            --region eu-north-1 \
+            --query "Status" \
+            --output text)
+
+          echo "EC2 Deployment Status: $STATUS"
+
+          if [ "$STATUS" != "Success" ]; then
+            aws ssm get-command-invocation \
+              --command-id "$COMMAND_ID" \
+              --instance-id i-03d9f6644b43993b8 \
+              --region eu-north-1
+            exit 1
+          fi
