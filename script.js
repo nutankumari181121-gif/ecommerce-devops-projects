@@ -1,6 +1,10 @@
 let cart = [];
 let total = 0;
 
+// =========================
+// SHOPPING CART
+// =========================
+
 function addToCart(name, price) {
     cart.push({
         name: name,
@@ -8,7 +12,6 @@ function addToCart(name, price) {
     });
 
     total += price;
-
     displayCart();
 }
 
@@ -16,63 +19,106 @@ function displayCart() {
     const cartItems = document.getElementById("cartItems");
     const totalElement = document.getElementById("total");
 
+    if (!cartItems || !totalElement) return;
+
     cartItems.innerHTML = "";
 
     cart.forEach((item, index) => {
         const div = document.createElement("div");
 
         div.innerHTML = `
-            <p>
-                ${index + 1}. ${item.name} - Rs.${item.price}
-            </p>
+            <p>${index + 1}. ${item.name} - ₹${item.price}</p>
         `;
 
         cartItems.appendChild(div);
     });
 
-    totalElement.innerText = "Total: Rs." + total;
+    totalElement.innerText = "Total: ₹" + total;
 }
 
 function showProducts() {
-    document.getElementById("products").scrollIntoView({
-        behavior: "smooth"
-    });
+    const products = document.getElementById("products");
+
+    if (products) {
+        products.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
 }
-/* LOGIN / REGISTER */
+
+// =========================
+// LOGIN / REGISTER
+// =========================
 
 function openLogin() {
-    document.getElementById("auth").style.display = "flex";
-    document.getElementById("loginBox").style.display = "block";
-    document.getElementById("registerBox").style.display = "none";
+    const auth = document.getElementById("auth");
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
 
-    document.getElementById("auth").scrollIntoView({
-        behavior: "smooth"
-    });
+    if (!auth) return;
+
+    auth.style.display = "flex";
+
+    if (loginBox) {
+        loginBox.style.display = "block";
+    }
+
+    if (registerBox) {
+        registerBox.style.display = "none";
+    }
 }
 
 function openRegister() {
-    document.getElementById("auth").style.display = "flex";
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("registerBox").style.display = "block";
+    const auth = document.getElementById("auth");
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
 
-    document.getElementById("auth").scrollIntoView({
-        behavior: "smooth"
-    });
+    if (!auth) return;
+
+    auth.style.display = "flex";
+
+    if (loginBox) {
+        loginBox.style.display = "none";
+    }
+
+    if (registerBox) {
+        registerBox.style.display = "block";
+    }
 }
 
 function showLogin() {
-    document.getElementById("loginBox").style.display = "block";
-    document.getElementById("registerBox").style.display = "none";
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
+
+    if (loginBox) {
+        loginBox.style.display = "block";
+    }
+
+    if (registerBox) {
+        registerBox.style.display = "none";
+    }
 }
 
 function showRegister() {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("registerBox").style.display = "block";
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
+
+    if (loginBox) {
+        loginBox.style.display = "none";
+    }
+
+    if (registerBox) {
+        registerBox.style.display = "block";
+    }
 }
 
+// =========================
+// REGISTER
+// =========================
+
 function registerUser() {
-    const name = document.getElementById("registerName").value;
-    const email = document.getElementById("registerEmail").value;
+    const name = document.getElementById("registerName").value.trim();
+    const email = document.getElementById("registerEmail").value.trim().toLowerCase();
     const password = document.getElementById("registerPassword").value;
 
     if (!name || !email || !password) {
@@ -80,17 +126,33 @@ function registerUser() {
         return;
     }
 
-    localStorage.setItem("shopEasyUser", JSON.stringify({
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return;
+    }
+
+    const user = {
         name: name,
         email: email,
         password: password
-    }));
+    };
+
+    localStorage.setItem("shopEasyUser", JSON.stringify(user));
 
     alert("Registration successful! Please login.");
+
+    document.getElementById("loginEmail").value = email;
+    document.getElementById("loginPassword").value = "";
+
     showLogin();
 }
+
+// =========================
+// LOGIN
+// =========================
+
 function loginUser() {
-    const email = document.getElementById("loginEmail").value.trim();
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
     const password = document.getElementById("loginPassword").value;
 
     if (!email || !password) {
@@ -98,25 +160,43 @@ function loginUser() {
         return;
     }
 
-    const savedUser = JSON.parse(localStorage.getItem("shopEasyUser"));
+    const savedUserData = localStorage.getItem("shopEasyUser");
 
-    if (
-        savedUser &&
-        savedUser.email === email &&
-        savedUser.password === password
-    ) {
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("loggedInUser", savedUser.name);
+    if (!savedUserData) {
+        alert("No account found. Please register first.");
+        return;
+    }
 
-        alert("Login successful! Welcome to ShopEasy.");
+    try {
+        const savedUser = JSON.parse(savedUserData);
 
-        closeAuth();
+        if (
+            savedUser.email === email &&
+            savedUser.password === password
+        ) {
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("loggedInUser", savedUser.name);
 
-    } else {
-        alert("Invalid email or password.");
+            alert("Login successful! Welcome to ShopEasy.");
+
+            closeAuth();
+        } else {
+            alert("Invalid email or password.");
+        }
+    } catch (error) {
+        alert("Account data is corrupted. Please register again.");
+        localStorage.removeItem("shopEasyUser");
     }
 }
 
+// =========================
+// CLOSE LOGIN POPUP
+// =========================
+
 function closeAuth() {
-    document.getElementById("auth").style.display = "none";
+    const auth = document.getElementById("auth");
+
+    if (auth) {
+        auth.style.display = "none";
+    }
 }
