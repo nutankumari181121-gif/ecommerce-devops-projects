@@ -200,3 +200,87 @@ function closeAuth() {
         auth.style.display = "none";
     }
 }
+// =========================
+// BUY NOW
+// =========================
+
+document.addEventListener("DOMContentLoaded", function () {
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(function (product) {
+        const buyButton = document.createElement("button");
+
+        buyButton.innerText = "Buy Now";
+        buyButton.className = "buy-btn";
+
+        buyButton.onclick = function () {
+            buyProduct(product);
+        };
+
+        product.appendChild(buyButton);
+    });
+
+    createBuyModal();
+});
+
+function buyProduct(product) {
+    const productImage = product.querySelector(".product-image");
+    const productName = product.querySelector("h3");
+    const productPrice = product.querySelector("p");
+
+    const modalImage = document.getElementById("buyProductImage");
+    const modalName = document.getElementById("buyProductName");
+    const modalPrice = document.getElementById("buyProductPrice");
+    const buyModal = document.getElementById("buyModal");
+
+    modalImage.innerHTML = productImage.innerHTML;
+    modalName.innerText = productName.innerText;
+    modalPrice.innerText = productPrice.innerText;
+
+    const image = modalImage.querySelector("img");
+
+    if (image) {
+        image.style.width = "180px";
+        image.style.height = "180px";
+        image.style.objectFit = "contain";
+    }
+
+    buyModal.style.display = "flex";
+}
+
+function createBuyModal() {
+    const modal = document.createElement("div");
+
+    modal.id = "buyModal";
+    modal.className = "buy-modal";
+    modal.innerHTML = `
+        <div class="buy-container">
+
+            <button class="buy-close" onclick="closeBuyModal()">×</button>
+
+            <div id="buyProductImage" class="buy-product-image"></div>
+
+            <h2 id="buyProductName"></h2>
+
+            <p id="buyProductPrice" class="buy-product-price"></p>
+
+            <button class="confirm-buy-btn" onclick="confirmBuy()">
+                Continue to Buy
+            </button>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function closeBuyModal() {
+    document.getElementById("buyModal").style.display = "none";
+}
+
+function confirmBuy() {
+    const name = document.getElementById("buyProductName").innerText;
+    const price = document.getElementById("buyProductPrice").innerText;
+
+    alert("Thank you for choosing " + name + " - " + price);
+}
