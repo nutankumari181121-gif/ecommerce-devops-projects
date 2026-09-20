@@ -900,3 +900,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* Hide buttons under product cards */
+.product > button {
+    display: none;
+}

@@ -801,3 +801,37 @@ function closeShopModal() {
         modal.style.display = "none";
     }
 }
+// =========================
+// PRODUCT SEARCH
+// =========================
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector(".search-box input");
+    const products = document.querySelectorAll(".product");
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", function () {
+
+        const searchText = searchInput.value
+            .trim()
+            .toLowerCase();
+
+        products.forEach(function (product) {
+
+            const productName =
+                product.querySelector("h3");
+
+            if (!productName) return;
+
+            const name =
+                productName.innerText.toLowerCase();
+
+            if (name.includes(searchText)) {
+                product.style.display = "";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    });
+});
