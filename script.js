@@ -835,3 +835,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+// =========================
+// GO TO HOME
+// =========================
+
+function goHome() {
+
+    const searchInput = document.querySelector(".search-box input");
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(function (product) {
+        product.style.display = "";
+    });
+
+    const shopModal = document.getElementById("shopModal");
+
+    if (shopModal) {
+        shopModal.style.display = "none";
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
