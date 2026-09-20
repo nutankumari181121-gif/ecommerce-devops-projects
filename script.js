@@ -201,7 +201,7 @@ function closeAuth() {
     }
 }
 // =========================
-// BUY NOW - FLIPKART STYLE
+// PRODUCT DETAILS + BUY FLOW
 // =========================
 
 let selectedBuyProduct = {
@@ -211,6 +211,7 @@ let selectedBuyProduct = {
 };
 
 let buyQuantity = 1;
+let selectedSize = "";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -218,25 +219,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     products.forEach(function (product) {
 
+        // Product card click
+        product.addEventListener("click", function (event) {
+
+            // Button par click ho to product card open na ho
+            if (event.target.closest("button")) {
+                return;
+            }
+
+            openProductDetails(product);
+        });
+
+        // Buy Now button
         const buyButton = document.createElement("button");
 
         buyButton.innerText = "Buy Now";
         buyButton.className = "buy-btn";
 
-        buyButton.onclick = function () {
-            buyProduct(product);
+        buyButton.onclick = function (event) {
+            event.stopPropagation();
+            openProductDetails(product);
         };
 
         product.appendChild(buyButton);
     });
 
-    createBuyModal();
+    createShopModal();
 });
 
-function buyProduct(product) {
+
+// =========================
+// OPEN PRODUCT DETAILS
+// =========================
+
+function openProductDetails(product) {
 
     if (localStorage.getItem("loggedIn") !== "true") {
-        alert("Please login first to buy a product.");
+        alert("Please login first.");
         openLogin();
         return;
     }
@@ -254,146 +273,303 @@ function buyProduct(product) {
     selectedBuyProduct.image = productImage.innerHTML;
 
     buyQuantity = 1;
+    selectedSize = "";
 
-    document.getElementById("buyProductName").innerText =
+    document.getElementById("detailImage").innerHTML =
+        selectedBuyProduct.image;
+
+    document.getElementById("detailName").innerText =
         selectedBuyProduct.name;
 
-    document.getElementById("buyProductPrice").innerText =
+    document.getElementById("detailPrice").innerText =
         "₹" + selectedBuyProduct.price.toLocaleString("en-IN");
 
-    document.getElementById("buyQuantity").innerText = "1";
-
-    document.getElementById("deliveryAddress").value = "";
-
-    const imageBox = document.getElementById("buyProductImage");
-
-    imageBox.innerHTML = selectedBuyProduct.image;
-
-    const image = imageBox.querySelector("img");
+    const image = document
+        .getElementById("detailImage")
+        .querySelector("img");
 
     if (image) {
-        image.style.width = "300px";
-        image.style.height = "300px";
+        image.style.width = "320px";
+        image.style.height = "320px";
         image.style.objectFit = "contain";
     }
 
-    updateBuyTotal();
+    showShopStep("details");
 
-    document.getElementById("buyModal").style.display = "flex";
+    document.getElementById("shopModal").style.display = "flex";
 }
 
-function createBuyModal() {
+
+// =========================
+// CREATE SHOP MODAL
+// =========================
+
+function createShopModal() {
 
     const modal = document.createElement("div");
 
-    modal.id = "buyModal";
-    modal.className = "buy-modal";
+    modal.id = "shopModal";
+    modal.className = "shop-modal";
 
     modal.innerHTML = `
-        <div class="flipkart-buy-card">
+
+        <div class="shop-modal-card">
 
             <button
-                class="buy-close"
-                onclick="closeBuyModal()">
+                class="shop-close"
+                onclick="closeShopModal()">
                 ×
             </button>
 
-            <div class="buy-left">
 
-                <div
-                    id="buyProductImage"
-                    class="buy-product-image">
-                </div>
+            <!-- PRODUCT DETAILS -->
 
-                <div class="buy-action-buttons">
+            <div id="detailsStep" class="shop-step">
 
-                    <button
-                        class="add-cart-buy"
-                        onclick="addSelectedToCart()">
-                        🛒 Add to Cart
-                    </button>
+                <div class="shop-product-layout">
 
-                    <button
-                        class="main-buy-button"
-                        onclick="confirmBuy()">
-                        ⚡ Buy Now
-                    </button>
+                    <div
+                        id="detailImage"
+                        class="detail-image">
+                    </div>
+
+                    <div class="detail-information">
+
+                        <span class="shop-brand">
+                            ShopEasy
+                        </span>
+
+                        <h2 id="detailName"></h2>
+
+                        <div class="detail-rating">
+                            ★★★★★
+                            <span>4.5</span>
+                        </div>
+
+                        <div
+                            id="detailPrice"
+                            class="detail-price">
+                        </div>
+
+                        <p class="delivery-info">
+                            ✓ Free Delivery
+                            <br>
+                            ✓ Easy Returns
+                            <br>
+                            ✓ Secure Shopping
+                        </p>
+
+                        <div class="detail-buttons">
+
+                            <button
+                                class="detail-cart-btn"
+                                onclick="addSelectedProductToCart()">
+                                🛒 Add to Cart
+                            </button>
+
+                            <button
+                                class="detail-buy-btn"
+                                onclick="startBuyFlow()">
+                                ⚡ Buy Now
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <div class="buy-right">
 
-                <span class="buy-shop-name">
-                    ShopEasy
-                </span>
+            <!-- SIZE + ADDRESS -->
 
-                <h2 id="buyProductName"></h2>
+            <div
+                id="buyStep"
+                class="shop-step"
+                style="display:none;">
 
-                <div class="buy-rating">
-                    ★★★★★
-                    <span>4.5</span>
+                <div class="checkout-header">
+                    <h2>Buy Now</h2>
+                    <p>Enter delivery details</p>
                 </div>
 
-                <div
-                    id="buyProductPrice"
-                    class="buy-product-price">
+                <div class="checkout-product">
+
+                    <div
+                        id="checkoutImage"
+                        class="checkout-image">
+                    </div>
+
+                    <div>
+                        <h3 id="checkoutName"></h3>
+
+                        <p
+                            id="checkoutPrice"
+                            class="checkout-price">
+                        </p>
+                    </div>
+
                 </div>
 
-                <div class="special-offer">
-                    🏷️ Special Price
+
+                <label class="checkout-label">
+                    Select Size
+                </label>
+
+                <div class="size-options">
+
+                    <button
+                        type="button"
+                        onclick="selectSize(this, 'S')">
+                        S
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="selectSize(this, 'M')">
+                        M
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="selectSize(this, 'L')">
+                        L
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="selectSize(this, 'XL')">
+                        XL
+                    </button>
+
                 </div>
 
-                <p class="offer-text">
-                    ✓ Free Delivery
-                    <br>
-                    ✓ Easy Returns
-                    <br>
-                    ✓ Secure Shopping
-                </p>
 
-                <hr>
-
-                <label class="quantity-label">
+                <label class="checkout-label">
                     Quantity
                 </label>
 
-                <div class="quantity-box">
+                <div class="checkout-quantity">
 
-                    <button onclick="changeBuyQuantity(-1)">
+                    <button
+                        type="button"
+                        onclick="changeBuyQuantity(-1)">
                         −
                     </button>
 
-                    <span id="buyQuantity">
+                    <span id="checkoutQuantity">
                         1
                     </span>
 
-                    <button onclick="changeBuyQuantity(1)">
+                    <button
+                        type="button"
+                        onclick="changeBuyQuantity(1)">
                         +
                     </button>
 
                 </div>
 
-                <label class="address-label">
+
+                <label class="checkout-label">
                     Delivery Address
                 </label>
 
                 <textarea
                     id="deliveryAddress"
                     placeholder="Enter your complete delivery address"
-                    rows="3">
+                    rows="4">
                 </textarea>
 
-                <div class="buy-total-row">
 
-                    <span>
-                        Total Amount
-                    </span>
+                <button
+                    class="continue-btn"
+                    onclick="showOrderSummary()">
+                    Continue
+                </button>
 
-                    <strong id="buyTotal"></strong>
+            </div>
+
+
+            <!-- ORDER SUMMARY -->
+
+            <div
+                id="summaryStep"
+                class="shop-step"
+                style="display:none;">
+
+                <div class="checkout-header">
+                    <h2>Order Summary</h2>
+                    <p>Check your order details</p>
+                </div>
+
+
+                <div class="summary-product">
+
+                    <div
+                        id="summaryImage"
+                        class="summary-image">
+                    </div>
+
+                    <div>
+
+                        <h3 id="summaryName"></h3>
+
+                        <p>
+                            Size:
+                            <strong id="summarySize"></strong>
+                        </p>
+
+                        <p>
+                            Quantity:
+                            <strong id="summaryQuantity"></strong>
+                        </p>
+
+                    </div>
 
                 </div>
+
+
+                <div class="price-summary">
+
+                    <div>
+                        <span>Product Price</span>
+                        <span id="summaryProductPrice"></span>
+                    </div>
+
+                    <div>
+                        <span>Delivery</span>
+                        <span class="free-text">
+                            FREE
+                        </span>
+                    </div>
+
+                    <hr>
+
+                    <div class="summary-total">
+                        <strong>Total Amount</strong>
+                        <strong id="summaryTotal"></strong>
+                    </div>
+
+                </div>
+
+
+                <div class="address-summary">
+
+                    <strong>
+                        Delivery Address
+                    </strong>
+
+                    <p id="summaryAddress"></p>
+
+                </div>
+
+
+                <button
+                    class="continue-btn"
+                    onclick="placeOrder()">
+                    Continue & Place Order
+                </button>
 
             </div>
 
@@ -402,6 +578,108 @@ function createBuyModal() {
 
     document.body.appendChild(modal);
 }
+
+
+// =========================
+// SHOW STEP
+// =========================
+
+function showShopStep(step) {
+
+    document.getElementById("detailsStep").style.display =
+        step === "details" ? "block" : "none";
+
+    document.getElementById("buyStep").style.display =
+        step === "buy" ? "block" : "none";
+
+    document.getElementById("summaryStep").style.display =
+        step === "summary" ? "block" : "none";
+}
+
+
+// =========================
+// ADD TO CART
+// =========================
+
+function addSelectedProductToCart() {
+
+    addToCart(
+        selectedBuyProduct.name,
+        selectedBuyProduct.price
+    );
+
+    alert(
+        selectedBuyProduct.name +
+        " added to your cart."
+    );
+
+    closeShopModal();
+}
+
+
+// =========================
+// START BUY
+// =========================
+
+function startBuyFlow() {
+
+    buyQuantity = 1;
+    selectedSize = "";
+
+    document.getElementById("checkoutName").innerText =
+        selectedBuyProduct.name;
+
+    document.getElementById("checkoutPrice").innerText =
+        "₹" +
+        selectedBuyProduct.price.toLocaleString("en-IN");
+
+    document.getElementById("checkoutQuantity").innerText =
+        "1";
+
+    document.getElementById("checkoutImage").innerHTML =
+        selectedBuyProduct.image;
+
+    document.getElementById("deliveryAddress").value = "";
+
+    document.querySelectorAll(".size-options button")
+        .forEach(function (button) {
+            button.classList.remove("selected-size");
+        });
+
+    const image = document
+        .getElementById("checkoutImage")
+        .querySelector("img");
+
+    if (image) {
+        image.style.width = "180px";
+        image.style.height = "180px";
+        image.style.objectFit = "contain";
+    }
+
+    showShopStep("buy");
+}
+
+
+// =========================
+// SELECT SIZE
+// =========================
+
+function selectSize(button, size) {
+
+    selectedSize = size;
+
+    document.querySelectorAll(".size-options button")
+        .forEach(function (item) {
+            item.classList.remove("selected-size");
+        });
+
+    button.classList.add("selected-size");
+}
+
+
+// =========================
+// QUANTITY
+// =========================
 
 function changeBuyQuantity(change) {
 
@@ -415,68 +693,109 @@ function changeBuyQuantity(change) {
         buyQuantity = 10;
     }
 
-    document.getElementById("buyQuantity").innerText =
-        buyQuantity;
+    const quantity = document.getElementById("checkoutQuantity");
 
-    updateBuyTotal();
+    if (quantity) {
+        quantity.innerText = buyQuantity;
+    }
 }
 
-function updateBuyTotal() {
 
-    const total =
-        selectedBuyProduct.price * buyQuantity;
+// =========================
+// ORDER SUMMARY
+// =========================
 
-    document.getElementById("buyTotal").innerText =
-        "₹" + total.toLocaleString("en-IN");
-}
+function showOrderSummary() {
 
-function addSelectedToCart() {
-
-    addToCart(
-        selectedBuyProduct.name,
-        selectedBuyProduct.price
-    );
-
-    alert(
-        selectedBuyProduct.name +
-        " added to your cart."
-    );
-}
-
-function confirmBuy() {
-
-    const address =
-        document.getElementById("deliveryAddress")
+    const address = document
+        .getElementById("deliveryAddress")
         .value
         .trim();
+
+    if (!selectedSize) {
+        alert("Please select a size.");
+        return;
+    }
 
     if (!address) {
         alert("Please enter your delivery address.");
         return;
     }
 
-    const total =
+    const totalPrice =
+        selectedBuyProduct.price * buyQuantity;
+
+
+    document.getElementById("summaryName").innerText =
+        selectedBuyProduct.name;
+
+    document.getElementById("summarySize").innerText =
+        selectedSize;
+
+    document.getElementById("summaryQuantity").innerText =
+        buyQuantity;
+
+    document.getElementById("summaryProductPrice").innerText =
+        "₹" +
+        selectedBuyProduct.price.toLocaleString("en-IN");
+
+    document.getElementById("summaryTotal").innerText =
+        "₹" +
+        totalPrice.toLocaleString("en-IN");
+
+    document.getElementById("summaryAddress").innerText =
+        address;
+
+    document.getElementById("summaryImage").innerHTML =
+        selectedBuyProduct.image;
+
+    const image = document
+        .getElementById("summaryImage")
+        .querySelector("img");
+
+    if (image) {
+        image.style.width = "100px";
+        image.style.height = "100px";
+        image.style.objectFit = "contain";
+    }
+
+    showShopStep("summary");
+}
+
+
+// =========================
+// PLACE ORDER
+// =========================
+
+function placeOrder() {
+
+    const totalPrice =
         selectedBuyProduct.price * buyQuantity;
 
     alert(
-        "Order placed successfully! 🎉\n\n" +
+        "🎉 Order placed successfully!\n\n" +
         "Product: " +
         selectedBuyProduct.name +
+        "\nSize: " +
+        selectedSize +
         "\nQuantity: " +
         buyQuantity +
         "\nTotal: ₹" +
-        total.toLocaleString("en-IN") +
-        "\n\nDelivery Address:\n" +
-        address
+        totalPrice.toLocaleString("en-IN")
     );
 
-    closeBuyModal();
+    closeShopModal();
 }
 
-function closeBuyModal() {
+
+// =========================
+// CLOSE MODAL
+// =========================
+
+function closeShopModal() {
 
     const modal =
-        document.getElementById("buyModal");
+        document.getElementById("shopModal");
 
     if (modal) {
         modal.style.display = "none";
